@@ -8,19 +8,60 @@ import (
 	"net/http"
 )
 
+type User struct {
+	ID        int64  ` json:"id"`
+	FirstName string ` json:"firstName"`
+	LastName  string ` json:"lastName"`
+	Email     string ` json:"email"`
+	Password  string ` json:"password"`
+	Phone     string ` json:"phone"`
+	Age       int    ` json:"age"`
+	Job       string ` json:"job"`
+}
+
 func main() {
-	// NOTE: base route /
 	var err error
 	var url string
 
-	url = "http://localhost:8080/"
-	err = pingUrl(url)
-	checkError(err)
+	// NOTE: base route /
+	// url = "http://localhost:8080/"
+	// err = pingUrl(url)
+	// checkError(err)
 
 	// NOTE: get users route /users
-	url = "http://localhost:8080/users"
-	err = getAllUsers(url, "mo@gmail.com")
+	// url = "http://localhost:8080/users"
+	// err = getAllUsers(url, "mo@gmail.com")
+	// checkError(err)
+
+	// NOTE:  insert a user to the database
+	url = "http://localhost:8080/register"
+	user := User{
+		FirstName: "ftestData",
+		LastName:  "ltestData",
+		Email:     "ttttest@mail.com",
+		Password:  "pass",
+		Phone:     "12345678",
+		Age:       89,
+		Job:       "testData",
+	}
+
+	err = insertUser(url, user)
 	checkError(err)
+}
+
+func insertUser(url string, user User) error {
+	reqBody, err := json.Marshal(user)
+	checkError(err)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
+	checkError(err)
+	req.Header.Set("Accept", "application/json")
+
+	res, err := http.DefaultClient.Do(req)
+	checkError(err)
+
+	getResponse(res)
+
+	return nil
 }
 
 func getAllUsers(url, email string) error {

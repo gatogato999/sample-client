@@ -11,7 +11,7 @@ a simple go client for the simple web-server.
 
 - [x] base route : `/`
 
-- [ ] insert a user to the database : `/register`
+- [x] insert a user to the database : `/register`
  - provide : `firstName`, `lastName` `email` `password`
     `phone` `age` `job` in the request body
  - the email is unique
