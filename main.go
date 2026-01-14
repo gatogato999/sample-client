@@ -9,14 +9,14 @@ import (
 )
 
 type User struct {
-	ID        int64  ` json:"id"`
-	FirstName string ` json:"firstName"`
-	LastName  string ` json:"lastName"`
-	Email     string ` json:"email"`
-	Password  string ` json:"password"`
-	Phone     string ` json:"phone"`
-	Age       int    ` json:"age"`
-	Job       string ` json:"job"`
+	ID        int64  `json:"id"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
+	Phone     string `json:"phone"`
+	Age       int    `json:"age"`
+	Job       string `json:"job"`
 }
 
 func main() {
@@ -35,22 +35,45 @@ func main() {
 
 	// NOTE:  insert a user to the database
 	// url = "http://localhost:8080/register"
-	user := User{
-		FirstName: "ftestData",
-		LastName:  "ltestData",
-		Email:     "momto@gmal.com",
-		Password:  "pass",
-		Phone:     "12345678",
-		Age:       89,
-		Job:       "testData",
-	}
+	// user := User{
+	// 	FirstName: "ftestData",
+	// 	LastName:  "ltestData",
+	// 	Email:     "momto@gmal.com",
+	// 	Password:  "pass",
+	// 	Phone:     "12345678",
+	// 	Age:       89,
+	// 	Job:       "testData",
+	// }
 	// err = insertUser(url, user)
 	// checkError(err)
 
-	// NOTE: loggin
-	url = "http://localhost:8080/auth"
-	err = logginUser(url, user.Email, user.Password)
+	// NOTE: loggin : /auth
+	// url = "http://localhost:8080/auth"
+	// err = logginUser(url, user.Email, user.Password)
+	// checkError(err)
+
+	// NOTE: get search for user : /query
+	url = "http://localhost:8080/query"
+	jwtToken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1vbXRvQGdtYWwuY29tIiwiZXhwIjoxNzY4NDA2NDg0LCJpYXQiOjE3Njg0MDU1ODQsInN1YiI6Im1vbXRvQGdtYWwuY29tIn0.9QHdpDY4kOE8jER9DtDwxSI1VYmQqKeTkYMbOsDBLqg"
+	err = searchUserByEmail(url, "kmomto@gmal.com", jwtToken)
 	checkError(err)
+}
+
+func searchUserByEmail(url, email, jwtToken string) error {
+	token := "Bearer " + jwtToken
+	url = url + fmt.Sprint("/", email)
+	req, err := http.NewRequest("POST", url, nil)
+	checkError(err)
+
+	req.Header.Add("Authorization", token)
+	req.Header.Set("Accept", "application/json")
+
+	res, err := http.DefaultClient.Do(req)
+	checkError(err)
+
+	getResponse(res)
+
+	return nil
 }
 
 func logginUser(url, email, password string) error {

@@ -24,7 +24,7 @@ a simple go client for the simple web-server.
  - send a valid credentials {email , password} in the request body
  - recive a token if its valid cedentials.
 
-- [ ] get a specific user info : `/query/{email}`
+- [x] get a specific user info : `/query/{email}`
  - send an email parameter the route
  - send a valid token in the `Authorization` request header
 
