@@ -20,7 +20,7 @@ a simple go client for the simple web-server.
 - [x] get all users in the database : `/users`
  - send an email (must be a user email)
 
-- [ ] login and get a jwt token: `/auth`.
+- [x] login and get a jwt token: `/auth`.
  - send a valid credentials {email , password} in the request body
  - recive a token if its valid cedentials.
 

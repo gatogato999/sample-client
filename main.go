@@ -34,19 +34,39 @@ func main() {
 	// checkError(err)
 
 	// NOTE:  insert a user to the database
-	url = "http://localhost:8080/register"
+	// url = "http://localhost:8080/register"
 	user := User{
 		FirstName: "ftestData",
 		LastName:  "ltestData",
-		Email:     "ttttest@mail.com",
+		Email:     "momto@gmal.com",
 		Password:  "pass",
 		Phone:     "12345678",
 		Age:       89,
 		Job:       "testData",
 	}
+	// err = insertUser(url, user)
+	// checkError(err)
 
-	err = insertUser(url, user)
+	// NOTE: loggin
+	url = "http://localhost:8080/auth"
+	err = logginUser(url, user.Email, user.Password)
 	checkError(err)
+}
+
+func logginUser(url, email, password string) error {
+	userInputs := map[string]string{"email": email, "hashed_password": password}
+	reqBody, err := json.Marshal(userInputs)
+	checkError(err)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
+	checkError(err)
+	req.Header.Set("Accept", "application/json")
+
+	res, err := http.DefaultClient.Do(req)
+	checkError(err)
+
+	getResponse(res)
+
+	return nil
 }
 
 func insertUser(url string, user User) error {
@@ -65,12 +85,12 @@ func insertUser(url string, user User) error {
 }
 
 func getAllUsers(url, email string) error {
-	e := map[string]string{"email": email}
+	userInputs := map[string]string{"email": email}
 
-	jsonE, err := json.Marshal(e)
+	reqBody, err := json.Marshal(userInputs)
 	checkError(err)
 
-	req, err := http.NewRequest("GET", url, bytes.NewBuffer(jsonE))
+	req, err := http.NewRequest("GET", url, bytes.NewBuffer(reqBody))
 	checkError(err)
 	req.Header.Set("Accept", "application/json")
 
