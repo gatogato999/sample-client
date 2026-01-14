@@ -9,7 +9,7 @@ a simple go client for the simple web-server.
 
 ## to implement
 
-- [ ] base route : `/`
+- [x] base route : `/`
 
 - [ ] insert a user to the database : `/register`
  - provide : `firstName`, `lastName` `email` `password`
@@ -17,7 +17,7 @@ a simple go client for the simple web-server.
  - the email is unique
  - all fields Not nullable except (age, phone, job)
 
-- [ ] get all users in the database : `/users`
+- [x] get all users in the database : `/users`
  - send an email (must be a user email)
 
 - [ ] login and get a jwt token: `/auth`.
