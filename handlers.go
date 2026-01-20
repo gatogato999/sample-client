@@ -5,70 +5,97 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 )
 
 func PingUrl() error {
 	url := "http://localhost:8080/"
 	req, err := http.NewRequest("GET", url, nil)
-	CheckError(err)
+	if err != nil {
+		return err
+	}
 	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
 	res, err := http.DefaultClient.Do(req)
-	CheckError(err)
+	if err != nil {
+		return err
+	}
 
-	GetResponse(res)
+	if err = GetResponse(res); err != nil {
+		return err
+	}
 
 	return nil
 }
 
-func Register(args []string) error {
-	input := ParseArgs(args)
+func Register(
+	fName,
+	lName,
+	email,
+	password,
+	phone,
+	job string,
+	age int64,
+) error {
 	url := "http://localhost:8080/register"
-	age, err := strconv.Atoi(input["age"])
-	CheckError(err)
 	userInputs := map[string]any{
-		"firstName":       input["firstName"],
-		"lastName":        input["lastName"],
-		"email":           input["email"],
-		"hashed_password": input["password"],
-		"phone":           input["phone"],
+		"firstName":       fName,
+		"lastName":        lName,
+		"email":           email,
+		"hashed_password": password,
+		"phone":           phone,
 		"age":             age,
-		"job":             input["job"],
+		"job":             job,
 	}
 	reqBody, err := json.Marshal(userInputs)
-
-	CheckError(err)
+	if err != nil {
+		return err
+	}
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
-	CheckError(err)
+	if err != nil {
+		return err
+	}
 	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
 	res, err := http.DefaultClient.Do(req)
-	CheckError(err)
+	if err != nil {
+		return err
+	}
 
-	GetResponse(res)
+	if err = GetResponse(res); err != nil {
+		return err
+	}
 
 	return nil
 }
 
-func LogginUser(args []string) error {
+func LogginUser(email, password string) error {
 	url := "http://localhost:8080/auth"
-	flags := ParseArgs(args)
 	userInputs := map[string]any{
-		"email":           flags["email"],
-		"hashed_password": flags["password"],
+		"email":           email,
+		"hashed_password": password,
 	}
 	reqBody, err := json.Marshal(userInputs)
-	CheckError(err)
+	if err != nil {
+		return err
+	}
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
-	CheckError(err)
+	if err != nil {
+		return err
+	}
 	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
 	res, err := http.DefaultClient.Do(req)
-	CheckError(err)
+	if err != nil {
+		return err
+	}
 
-	SaveJwt(res.Cookies())
-	GetResponse(res)
+	err = SaveJwt(res.Cookies())
+	if err = GetResponse(res); err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -77,32 +104,51 @@ func ListUsers() error {
 	url := "http://localhost:8080/users"
 
 	req, err := http.NewRequest("GET", url, nil)
-	CheckError(err)
-	AddJwt(req)
+	if err != nil {
+		return err
+	}
+	err = AddJwt(req)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
 
 	res, err := http.DefaultClient.Do(req)
-	CheckError(err)
+	if err != nil {
+		return err
+	}
 
-	GetResponse(res)
+	if err = GetResponse(res); err != nil {
+		return err
+	}
 
 	return nil
 }
 
-func SearchUser(args []string) error {
-	input := ParseArgs(args)
-	url := fmt.Sprint("http://localhost:8080/query/", input["email"])
+func SearchUser(email string) error {
+	url := fmt.Sprint("http://localhost:8080/query/", email)
 	println(url)
-	req, err := http.NewRequest("POST", url, nil)
-	CheckError(err)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return err
+	}
 
-	AddJwt(req)
+	err = AddJwt(req)
+	if err != nil {
+		return err
+	}
 	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 
 	res, err := http.DefaultClient.Do(req)
-	CheckError(err)
+	if err != nil {
+		return err
+	}
 
-	GetResponse(res)
+	if err = GetResponse(res); err != nil {
+		return err
+	}
 
 	return nil
 }
