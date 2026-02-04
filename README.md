@@ -10,11 +10,10 @@ a simple go client for the simple web-server.
 ## to implement
 
 - [x] ping the base route
-- [x] register new user
 - [x] login
-- [x] list all users
 - [x] query for a user 
 
+- [x] all routes are protected
 - [x] fix jwt failure path and make apply to all os file systems
 - [x] handling errors (returned errors)
 - [x] better arugment parsing (use flagset)

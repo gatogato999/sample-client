@@ -13,7 +13,6 @@ func ShowMainToolUsage() {
 	fmt.Println("\nsample-client base")
 	fmt.Println("sample-client register fname lname email pass phone age job ")
 	fmt.Println("sample-client loggin email <xxxx@xxx> password <xxx>")
-	fmt.Println("sample-client list")
 	fmt.Println("sample-client query <email> ")
 }
 
@@ -22,7 +21,8 @@ func GetResponse(res *http.Response) error {
 
 	if res.StatusCode >= 400 {
 		b, _ := io.ReadAll(res.Body)
-		return fmt.Errorf("server error: %s", b)
+		fmt.Println("\nResponse status:", res.Status)
+		return fmt.Errorf(" %s ", b)
 	} else {
 		fmt.Println("\nResponse status:", res.Status)
 
@@ -32,7 +32,7 @@ func GetResponse(res *http.Response) error {
 			return err
 		}
 
-		b, err := json.MarshalIndent(data, "", "")
+		b, err := json.MarshalIndent(data, "\t", "\n")
 		if err != nil {
 			return err
 		}
