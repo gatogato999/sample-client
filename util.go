@@ -11,9 +11,7 @@ import (
 
 func ShowMainToolUsage() {
 	fmt.Println("\nsample-client base")
-	fmt.Println("sample-client register fname lname email pass phone age job ")
-	fmt.Println("sample-client loggin email <xxxx@xxx> password <xxx>")
-	fmt.Println("sample-client query <email> ")
+	fmt.Println("sample-client query email <xxxx@xxx> password <xxx>")
 }
 
 func GetResponse(res *http.Response) error {
@@ -63,6 +61,18 @@ func SaveJwt(cookies []*http.Cookie) error {
 		}
 	}
 	return fmt.Errorf("cookie not found")
+}
+
+func RemJwt() error {
+	dir, err := getConfigDir()
+	if err != nil {
+		return err
+	}
+	_, err = os.ReadFile(filepath.Join(dir, "jwt_token"))
+	if err != nil {
+		return err
+	}
+	return os.Remove(fmt.Sprint(dir, "jwt_token"))
 }
 
 func Loadjwt() (*http.Cookie, error) {

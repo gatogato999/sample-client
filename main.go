@@ -18,8 +18,6 @@ func main() {
 	switch mainCommand {
 	case "base":
 		err = PingUrl()
-	case "loggin":
-		err = LogginUserFlags(os.Args[2:])
 	case "query":
 		err = SearchUserFlags(os.Args[2:])
 	default:
@@ -31,24 +29,15 @@ func main() {
 	}
 }
 
-func LogginUserFlags(args []string) error {
-	flagset := flag.NewFlagSet("login", flag.ExitOnError)
-	email := flagset.String("email", "", "user valid email")
-	password := flagset.String("password", "", "user password")
-	if err := flagset.Parse(args); err != nil {
-		return err
-	}
-	return LogginUser(*email, *password)
-}
-
 func SearchUserFlags(args []string) error {
 	flagset := flag.NewFlagSet("search", flag.ExitOnError)
-	email := flagset.String("email", "", "user email to search for ")
+	email := flagset.String("email", "", "user email ")
+	password := flagset.String("password", "", "user password")
 	if err := flagset.Parse(args); err != nil {
 		return err
 	}
 	if *email == "" {
 		return fmt.Errorf("email flag is required")
 	}
-	return SearchUser(*email)
+	return SearchUser(*email, *password)
 }

@@ -7,10 +7,15 @@ a simple go client for the simple web-server.
 - clone the repo
 - install dependencies
 
+## usage 
+
+```bash
+./app query -email <an email> -password <least 8charcters>
+```
+
 ## to implement
 
 - [x] ping the base route
-- [x] login
 - [x] query for a user 
 
 - [x] all routes are protected

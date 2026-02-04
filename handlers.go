@@ -28,7 +28,7 @@ func PingUrl() error {
 	return nil
 }
 
-func LogginUser(email, password string) error {
+func SearchUser(email, password string) error {
 	url := "http://localhost:8080/auth"
 	userInputs := map[string]any{
 		"email":           email,
@@ -55,13 +55,8 @@ func LogginUser(email, password string) error {
 		return err
 	}
 
-	return nil
-}
-
-func SearchUser(email string) error {
-	url := fmt.Sprint("http://localhost:8080/query/", email)
-	println(url)
-	req, err := http.NewRequest("GET", url, nil)
+	url = fmt.Sprint("http://localhost:8080/query/", email)
+	req, err = http.NewRequest("GET", url, nil)
 	if err != nil {
 		return err
 	}
@@ -73,7 +68,7 @@ func SearchUser(email string) error {
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 
-	res, err := http.DefaultClient.Do(req)
+	res, err = http.DefaultClient.Do(req)
 	if err != nil {
 		return err
 	}
@@ -81,6 +76,8 @@ func SearchUser(email string) error {
 	if err = GetResponse(res); err != nil {
 		return err
 	}
-
+	if err = RemJwt(); err != nil {
+		return err
+	}
 	return nil
 }
